@@ -45,4 +45,5 @@ fi
 
 rm -f /run/mysqld/init.sock
 
+echo "Starting MariaDB server..."
 exec mariadbd --user=mysql --datadir=/var/lib/mysql
