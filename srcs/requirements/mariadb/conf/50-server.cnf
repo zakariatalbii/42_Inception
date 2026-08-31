@@ -3,3 +3,8 @@ user = mysql
 bind-address = 0.0.0.0
 port = 3306
 datadir = /var/lib/mysql
+socket = /run/mysqld/mysqld.sock
+pid-file = /run/mysqld/mysqld.pid
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+skip-name-resolve
