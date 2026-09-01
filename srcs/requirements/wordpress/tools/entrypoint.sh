@@ -59,5 +59,5 @@ if [ ! -f /var/www/html/.wp_installed ]; then
     touch "/var/www/html/.wp_installed"
 fi
 
-echo "Starting php-fpm..."
+echo "Starting PHP-FPM..."
 exec php-fpm8.2 -F

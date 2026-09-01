@@ -33,6 +33,19 @@ services:
       - wp_user_password
     restart: unless-stopped
   nginx:
+    build:
+      context: ./requirements/nginx
+    image: nginx
+    container_name: nginx
+    networks:
+      - inception
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html:ro
+    env_file:
+      - .env
+    restart: unless-stopped
 
 networks:
   inception:
