@@ -56,9 +56,9 @@ shell-mariadb:
 
 hosts:
 	@IP=$$(hostname -I | awk '{print $$1}'); \
-	grep -qE "[[:space:]]$(LOGIN)\.42\.fr([[:space:]]|$$)" /etc/hosts 2> /dev/null || \
+	sudo sed -i "/[[:space:]]$(LOGIN)\.42\.fr[[:space:]]/d" /etc/hosts; \
 	echo "$$IP $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null
-	@echo "Configured $(LOGIN).42.fr"
+	@echo "Configured $(LOGIN).42.fr -> $$IP"
 
 clean:
 	$(COMPOSE) down --remove-orphans
@@ -70,7 +70,9 @@ fclean:
 
 fclean-data:
 	@echo "WARNING: this deletes the two persistent Inception data directories."
-	@read -p "Continue? [y/N] " confirm; [ "$$confirm" = "y" ] || exit 1
-	sudo rm -rf $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
+	@read -p "Continue? [y/N] " confirm; \
+	if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
+		sudo rm -rf $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress; \
+	fi
 
 re: fclean all
