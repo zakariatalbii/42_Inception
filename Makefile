@@ -54,6 +54,12 @@ shell-wordpress:
 shell-mariadb:
 	$(COMPOSE) exec mariadb sh
 
+hosts:
+	@IP=$$(hostname -I | awk '{print $$1}'); \
+	grep -qE "[[:space:]]$(LOGIN)\.42\.fr([[:space:]]|$$)" /etc/hosts 2> /dev/null || \
+	echo "$$IP $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null
+	@echo "Configured $(LOGIN).42.fr"
+
 clean:
 	$(COMPOSE) down --remove-orphans
 
