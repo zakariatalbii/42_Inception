@@ -13,7 +13,7 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db > /dev/null
 fi
 
-if [ ! -f "/var/lib/mysql/.${MYSQL_DATABASE}_initialized" ]; then
+if [ ! -f "/var/lib/mysql/.${DB_NAME}_initialized" ]; then
     echo "Starting temporary MariaDB server..."
     mariadbd --user=mysql --datadir=/var/lib/mysql --skip-networking --socket=/run/mysqld/init.sock &
     TMP_PID="$!"
@@ -31,16 +31,16 @@ if [ ! -f "/var/lib/mysql/.${MYSQL_DATABASE}_initialized" ]; then
 
     mariadb --socket=/run/mysqld/init.sock << SQL
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
-CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
-ALTER USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
-GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;
+CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+ALTER USER '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
 SQL
 
     mariadb-admin --socket=/run/mysqld/init.sock -u root -p"$DB_ROOT_PASSWORD" shutdown
     wait "$TMP_PID" 2> /dev/null || true
-    touch "/var/lib/mysql/.${MYSQL_DATABASE}_initialized"
+    touch "/var/lib/mysql/.${DB_NAME}_initialized"
 fi
 
 rm -f /run/mysqld/init.sock

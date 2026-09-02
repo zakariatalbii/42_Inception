@@ -19,7 +19,7 @@ fi
 if [ ! -f /var/www/html/.wp_installed ]; then
     echo "Waiting for MariaDB..."
     i=0
-    until mariadb -h "${MYSQL_HOST}" -u"${MYSQL_USER}" -p"${DB_PASSWORD}" -e "SELECT 1" "${MYSQL_DATABASE}" > /dev/null 2>&1; do
+    until mariadb -h "${DB_HOST}" -u"${DB_USER}" -p"${DB_PASSWORD}" -e "SELECT 1" "${DB_NAME}" > /dev/null 2>&1; do
         i=$((i + 1))
         if [ "$i" -ge 30 ]; then
             echo "MariaDB is not reachable." >&2
@@ -33,10 +33,10 @@ if [ ! -f /var/www/html/.wp_installed ]; then
 
     su -s /bin/bash www-data -c "wp config create \
         --path=/var/www/html \
-        --dbname='${MYSQL_DATABASE}' \
-        --dbuser='${MYSQL_USER}' \
+        --dbname='${DB_NAME}' \
+        --dbuser='${DB_USER}' \
         --dbpass='${DB_PASSWORD}' \
-        --dbhost='${MYSQL_HOST}' \
+        --dbhost='${DB_HOST}:${DB_PORT}' \
         --dbcharset=utf8mb4 \
         --skip-check"
 
