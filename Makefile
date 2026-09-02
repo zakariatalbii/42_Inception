@@ -27,5 +27,44 @@ stop:
 start:
 	$(COMPOSE) start
 
+restart:
+	$(COMPOSE) restart
+
+status:
+	$(COMPOSE) ps
+
+logs:
+	$(COMPOSE) logs -f
+
+logs-nginx:
+	$(COMPOSE) logs -f nginx
+
+logs-wordpress:
+	$(COMPOSE) logs -f wordpress
+
+logs-mariadb:
+	$(COMPOSE) logs -f mariadb
+
+shell-nginx:
+	$(COMPOSE) exec nginx sh
+
+shell-wordpress:
+	$(COMPOSE) exec wordpress sh
+
+shell-mariadb:
+	$(COMPOSE) exec mariadb sh
+
 clean:
 	$(COMPOSE) down --remove-orphans
+
+fclean:
+	$(COMPOSE) down -v --remove-orphans
+	docker image rm -f nginx wordpress mariadb 2> /dev/null || true
+	@echo "Persistent host data was NOT deleted from $(DATA_DIR)."
+
+fclean-data:
+	@echo "WARNING: this deletes the two persistent Inception data directories."
+	@read -p "Continue? [y/N] " confirm; [ "$$confirm" = "y" ] || exit 1
+	sudo rm -rf $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
+
+re: fclean all
