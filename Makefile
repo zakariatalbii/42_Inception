@@ -92,13 +92,13 @@ logs-mariadb:
 	$(COMPOSE) logs -f mariadb
 
 shell-nginx:
-	$(COMPOSE) exec nginx sh
+	$(COMPOSE) exec nginx bash
 
 shell-wordpress:
-	$(COMPOSE) exec wordpress sh
+	$(COMPOSE) exec wordpress bash
 
 shell-mariadb:
-	$(COMPOSE) exec mariadb sh
+	$(COMPOSE) exec mariadb bash
 
 hosts:
 	@IP=$$(hostname -I | awk '{print $$1}'); \
