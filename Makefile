@@ -105,7 +105,7 @@ shell-mariadb:
 
 hosts:
 	@IP=$$(hostname -I | awk '{print $$1}'); \
-	sudo sed -i "/[[:space:]]$(LOGIN)\.42\.fr[[:space:]]/d" /etc/hosts; \
+	sudo sed -i "/[[:space:]]$(LOGIN)\.42\.fr\([[:space:]]\|$$\)/d" /etc/hosts; \
 	echo "$$IP $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null; \
 	echo "Configured $(LOGIN).42.fr -> $$IP"
 
