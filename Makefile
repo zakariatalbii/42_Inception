@@ -1,6 +1,8 @@
+SHELL := /bin/bash
+
 ENV_FILE = srcs/.env
 
-LOGIN ?= $(shell grep '^LOGIN=' $(ENV_FILE) | cut -d= -f2 | tr -d '"')
+LOGIN = $(shell grep '^LOGIN=' $(ENV_FILE) | cut -d= -f2 | tr -d '"')
 
 DATA_DIR = /home/$(LOGIN)/data
 
@@ -47,6 +49,7 @@ secrets:
 	fi; \
 	mkdir -p secrets; \
 	chmod 700 secrets; \
+	touch secrets/.gitkeep; \
 	printf '%s' "$$DB_ROOT_PASSWORD" > secrets/db_root_password; \
 	printf '%s' "$$DB_PASSWORD" > secrets/db_password; \
 	printf '%s' "$$WP_ADMIN_PASSWORD" > secrets/wp_admin_password; \
