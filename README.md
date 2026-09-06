@@ -1,8 +1,8 @@
 *This project has been created as part of the 42 curriculum by zatalbi.*
 
-# Inception
+# 🐳 Inception
 
-## Description
+## 🔍 Description
 
 Inception is a 42 School system-administration project whose goal is to build a small, secure and reproducible web infrastructure using Docker and Docker Compose.
 
@@ -14,7 +14,7 @@ The project is composed of three custom Docker images, each running one main ser
 
 The services run in separate containers and communicate through a dedicated Docker bridge network. Only NGINX publishes a port to the host.
 
-### Project architecture
+### 🏗️ Project architecture
 
 ```text
                          Host
@@ -42,7 +42,7 @@ The services run in separate containers and communicate through a dedicated Dock
              dedicated "inception" bridge network.
 ```
 
-### Project sources
+### 📁 Project sources
 
 The repository is structured as follows:
 
@@ -76,7 +76,7 @@ The three images are built from `debian:bookworm` rather than using ready-made a
 
 WordPress and WP-CLI are downloaded during the WordPress container's first initialization. NGINX generates a local self-signed TLS certificate when required. MariaDB initializes its database only when its persistent data directory has not already been initialized.
 
-### Main design choices
+### 📐 Main design choices
 
 - **One service per container**: NGINX, WordPress/PHP-FPM and MariaDB have separate responsibilities and separate containers.
 - **Custom images**: the project builds each service from Debian Bookworm Dockerfiles.
@@ -88,7 +88,7 @@ WordPress and WP-CLI are downloaded during the WordPress container's first initi
 - **Persistent storage**: MariaDB data and WordPress files are stored under `/home/${LOGIN}/data/` so containers can be recreated without intentionally deleting application data.
 - **Foreground processes**: the entrypoints finish by using `exec` to run the main service process in the foreground, allowing Docker to track the service correctly.
 
-## Virtual Machines vs Docker
+## 🖥️ Virtual Machines vs Docker
 
 | Virtual Machines | Docker containers |
 |---|---|
@@ -100,7 +100,7 @@ WordPress and WP-CLI are downloaded during the WordPress container's first initi
 
 Docker is appropriate for this project because the infrastructure consists of independent application services that need reproducible environments without running three complete operating systems.
 
-## Secrets vs Environment Variables
+## 🔐 Secrets vs Environment Variables
 
 Environment variables are used for ordinary configuration, for example:
 
@@ -124,7 +124,7 @@ This separation prevents application passwords from being part of the normal `.e
 
 Environment variables are convenient for configuration but are not a dedicated secret-management mechanism. Secrets provide a more appropriate interface for sensitive credentials.
 
-## Docker Network vs Host Network
+## 🌐 Docker Network vs Host Network
 
 The project uses a dedicated Docker `bridge` network named `inception`.
 
@@ -139,7 +139,7 @@ The database and PHP-FPM ports do not need to be exposed on the host. Only NGINX
 
 With **host networking**, a container shares the host's network namespace. This reduces network isolation and makes the container directly participate in the host network. The dedicated Docker network is preferable here because it keeps internal service communication inside the Compose infrastructure.
 
-## Docker Volumes vs Bind Mounts
+## 💾 Docker Volumes vs Bind Mounts
 
 A **Docker volume** is managed by Docker and can persist independently of a container. A **bind mount** maps a specific host path directly into a container.
 
@@ -159,9 +159,9 @@ and configures them with Docker's local volume driver and host-backed storage:
 
 This gives the project explicit persistent host locations while keeping container storage disposable.
 
-## Instructions
+## 📜 Instructions
 
-### Prerequisites
+### 🛠️ Prerequisites
 
 You need:
 
@@ -278,7 +278,7 @@ make fclean-data      Delete persistent MariaDB and WordPress host data
 make re               Full Docker cleanup followed by startup
 ```
 
-## Persistence and cleanup
+## 🧹 Persistence and cleanup
 
 Persistent data is stored at:
 
@@ -313,7 +313,7 @@ make fclean-data
 
 The last command is destructive and asks for confirmation.
 
-## Resources
+## 📚 Resources
 
 ### Official documentation and references
 
