@@ -19,7 +19,7 @@ fi
 if [ ! -f /var/www/html/.wp_installed ]; then
     echo "Waiting for MariaDB..."
     i=0
-    until mariadb -h "${DB_HOST}" -u"${DB_USER}" -p"${DB_PASSWORD}" -e "SELECT 1" "${DB_NAME}" > /dev/null 2>&1; do
+    until mariadb -h "${DB_HOST}" -P "${DB_PORT}" -u"${DB_USER}" -p"${DB_PASSWORD}" -e "SELECT 1" "${DB_NAME}" > /dev/null 2>&1; do
         i=$((i + 1))
         if [ "$i" -ge 30 ]; then
             echo "MariaDB is not reachable." >&2
@@ -55,6 +55,10 @@ if [ ! -f /var/www/html/.wp_installed ]; then
         '${WP_USER_EMAIL}' \
         --user_pass='${WP_USER_PASSWORD}' \
         --role=author"
+
+    su -s /bin/bash www-data -c "wp option update \
+        --path=/var/www/html \
+        permalink_structure '/%postname%/'"
 
     touch "/var/www/html/.wp_installed"
 fi
